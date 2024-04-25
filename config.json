@@ -1,0 +1,277 @@
+[
+    {
+        "networks": [
+            {
+                "name": "lan-web",
+                "id": 10,
+                "description": "Rede para almacenar servidores web",
+                "config": {
+                    "ipv4": {
+                        "enable": true,
+                        "address": "172.16.10.1/24",
+                        "dhcp": {
+                            "enable": false,
+                            "range": {
+                                "start": "172.16.10.100",
+                                "end": "172.16.10.200"
+                            }
+                        }
+                    },
+                    "ipv6": {
+                        "enable": false
+                    }
+                }
+            },
+            {
+                "name": "lan-ftpd",
+                "id": 20,
+                "description": "Rede para almacenar servidores de transferencia de arquivos",
+                "config": {
+                    "ipv4": {
+                        "enable": true,
+                        "address": "172.16.20.1/24",
+                        "dhcp": {
+                            "enable": false
+                        }
+                    },
+                    "ipv6": {
+                        "enable": false
+                    }
+                }
+            },
+            {
+                "name": "lan-central",
+                "id": 30,
+                "description": "Rede que interconecta as redes 10 e 20 co 40 e 50",
+                "config": {
+                    "ipv4": {
+                        "enable": true,
+                        "address": "172.16.30.1/24",
+                        "dhcp": {
+                            "enable": false
+                        }
+                    },
+                    "ipv6": {
+                        "enable": false
+                    }
+                }
+            },
+            {
+                "name": "lan-db",
+                "id": 40,
+                "description": "Rede para almacenar servidores de bases de datos",
+                "config": {
+                    "ipv4": {
+                        "enable": true,
+                        "address": "172.16.40.1/24",
+                        "dhcp": {
+                            "enable": false
+                        }
+                    },
+                    "ipv6": {
+                        "enable": false
+                    }
+                }
+            },
+            {
+                "name": "lan-mail",
+                "id": 50,
+                "description": "Rede para almacenar servidores de correo electronico",
+                "config": {
+                    "ipv4": {
+                        "enable": true,
+                        "address": "172.16.50.1/24",
+                        "dhcp": {
+                            "enable": false
+                        }
+                    },
+                    "ipv6": {
+                        "enable": false
+                    }
+                }
+            }
+        ],
+
+        "profiles": [
+            {
+                "id": 1,
+                "name": "serv-web",
+                "description": "Perfil para os servidores web.",
+                "hardware": {
+                    "cpu": {
+                        "cores": 1,
+                        "execution_cap": 100
+                    },
+
+                    "memory": {
+                        "limit": 2048
+                    }
+                },
+                "network": [
+                    {
+                        "adapter": "eth0",
+                        "net": 10
+                    }
+                ]
+            },
+            {
+                "id": 2,
+                "name": "serv-ftpd",
+                "description": "Perfil para os servidores de transferencia de arquivos.",
+                "hardware": {
+                    "cpu": {
+                        "cores": 1,
+                        "execution_cap": 100
+                    },
+
+                    "memory": {
+                        "limit": 2048
+                    }
+                },
+                "network": [
+                    {
+                        "adapter": "eth0",
+                        "net": 20
+                    }
+                ]
+            },
+            {
+                "id": 3,
+                "name": "serv-db",
+                "description": "Perfil para os servidores db.",
+                "hardware": {
+                    "cpu": {
+                        "cores": 1,
+                        "execution_cap": 100
+                    },
+
+                    "memory": {
+                        "limit": 2048
+                    }
+                },
+                "network": [
+                    {
+                        "adapter": "eth0",
+                        "net": 40
+                    }
+                ]
+            },
+            {
+                "id": 4,
+                "name": "serv-mail",
+                "description": "Perfil para os servidores mail.",
+                "hardware": {
+                    "cpu": {
+                        "cores": 1,
+                        "execution_cap": 100
+                    },
+
+                    "memory": {
+                        "limit": 2048
+                    }
+                },
+                "network": [
+                    {
+                        "adapter": "eth0",
+                        "net": 50
+                    }
+                ]
+            }
+        ],
+
+        "servers": [
+            {
+                "name": "serv-web-001",
+                "id": 1,
+                "os": "ubuntu:22.04",
+                "profile": 1,
+                "network": [
+                    {
+                        "adapter": "eth0",
+                        "config": "static",
+                        "ipv4": {
+                            "enable": true,
+                            "address": "172.16.10.10"
+                        },
+                        "ipv6": {
+                            "enable": false
+                        }
+                    }
+                ],
+                "provision": [
+                    "apt-get update",
+                    "apt-get install apache2 php php-mysql php-xml php-zip php-mbstring php-json"
+                ]
+            },
+            {
+                "name": "serv-ftpd-001",
+                "id": 2,
+                "os": "ubuntu:22.04",
+                "profile": 2,
+                "network": [
+                    {
+                        "adapter": "eth0",
+                        "config": "static",
+                        "ipv4": {
+                            "enable": true,
+                            "address": "172.16.20.10"
+                        },
+                        "ipv6": {
+                            "enable": false
+                        }
+                    }
+                ],
+                "provision": [
+                    "apt-get update",
+                    "apt-get install vsftpd"
+                ]
+            },
+            {
+                "name": "serv-db-001",
+                "id": 3,
+                "os": "ubuntu:22.04",
+                "profile": 3,
+                "network": [
+                    {
+                        "adapter": "eth0",
+                        "config": "static",
+                        "ipv4": {
+                            "enable": true,
+                            "address": "172.16.40.10"
+                        },
+                        "ipv6": {
+                            "enable": false
+                        }
+                    }
+                ],
+                "provision": [
+                    "apt-get update",
+                    "apt-get install mariadb-server"
+                ]
+            },
+            {
+                "name": "serv-mail-001",
+                "id": 4,
+                "os": "ubuntu:22.04",
+                "profile": 4,
+                "network": [
+                    {
+                        "adapter": "eth0",
+                        "config": "static",
+                        "ipv4": {
+                            "enable": true,
+                            "address": "172.16.50.10"
+                        },
+                        "ipv6": {
+                            "enable": false
+                        }
+                    }
+                ],
+                "provision": [
+                    "apt-get update",
+                    "apt-get install postfix dovecot-imapd"
+                ]
+            }
+        ]
+    }
+]
